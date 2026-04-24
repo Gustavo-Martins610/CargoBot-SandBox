@@ -1,0 +1,622 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial - CargoBot Kids</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #f4efe5;
+      --panel: #fffaf2;
+      --accent: #136f63;
+      --accent-2: #f2a541;
+      --text: #2d2d2d;
+      --border: #d4cec0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(135deg, #f4efe5 0%, #e8e1d6 100%);
+      padding: 2rem;
+      text-align: center;
+      border-bottom: 4px solid var(--accent);
+      margin-bottom: 2rem;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      font-size: 1.1rem;
+      color: #666;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 1rem 2rem;
+    }
+
+    .nav {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      justify-content: center;
+    }
+
+    .nav a, .nav button {
+      padding: 0.7rem 1.5rem;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+
+    .nav a:hover, .nav button:hover {
+      background: #0f5650;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    section {
+      background: var(--panel);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      border-left: 5px solid var(--accent);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    h2 {
+      color: var(--accent);
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    h3 {
+      color: #0f5650;
+      font-size: 1.3rem;
+      margin-top: 1.5rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .code-block {
+      background: linear-gradient(135deg, #f5f5f5 0%, #efefef 100%);
+      border: 2px solid var(--accent);
+      border-radius: 8px;
+      padding: 1rem;
+      margin: 1rem 0;
+      font-family: 'Courier New', monospace;
+      overflow-x: auto;
+      position: relative;
+    }
+
+    .code-block code {
+      color: #d63384;
+      font-weight: 600;
+    }
+
+    .command {
+      display: inline-block;
+      background: #e0f2fe;
+      color: #0284c7;
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      font-family: monospace;
+      margin: 0 0.2rem;
+      font-weight: bold;
+    }
+
+    .example {
+      background: linear-gradient(135deg, #e0f2fe 0%, #cffafe 100%);
+      border-left: 4px solid #0284c7;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 6px;
+    }
+
+    .example-title {
+      font-weight: bold;
+      color: #0c4a6e;
+      margin-bottom: 0.5rem;
+    }
+
+    .exercise {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border-left: 4px solid var(--accent-2);
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 6px;
+    }
+
+    .exercise-title {
+      font-weight: bold;
+      color: #78350f;
+      margin-bottom: 0.5rem;
+    }
+
+    .command-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .command-card {
+      background: linear-gradient(135deg, #f0fdf4 0%, #dbeafe 100%);
+      border-radius: 8px;
+      padding: 1.2rem;
+      border: 2px solid var(--accent);
+    }
+
+    .command-card h4 {
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+      font-family: monospace;
+      font-size: 1.1rem;
+    }
+
+    .command-card p {
+      color: #555;
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .syntax {
+      background: #f5f5f5;
+      padding: 0.5rem;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.9rem;
+      color: #d63384;
+    }
+
+    .tip {
+      background: linear-gradient(135deg, #f3e8ff 0%, #fce7f3 100%);
+      border-left: 4px solid #a855f7;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 6px;
+    }
+
+    .tip-title {
+      font-weight: bold;
+      color: #6b21a8;
+      margin-bottom: 0.5rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+    }
+
+    th, td {
+      border: 2px solid var(--border);
+      padding: 1rem;
+      text-align: left;
+    }
+
+    th {
+      background: linear-gradient(135deg, #e0f2fe 0%, #cffafe 100%);
+      color: #0c4a6e;
+      font-weight: bold;
+    }
+
+    tr:nth-child(even) {
+      background: #fafaf8;
+    }
+
+    .flow-diagram {
+      background: #f9f9f7;
+      border: 2px dashed var(--accent);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      text-align: center;
+    }
+
+    .step {
+      display: inline-block;
+      background: var(--accent);
+      color: white;
+      padding: 0.7rem 1.2rem;
+      border-radius: 6px;
+      margin: 0.5rem;
+      font-weight: bold;
+    }
+
+    .arrow {
+      display: inline-block;
+      margin: 0 0.5rem;
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #666;
+      border-top: 2px solid var(--border);
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 1.8rem;
+      }
+
+      .container {
+        padding: 0 0.5rem 1rem;
+      }
+
+      section {
+        padding: 1rem;
+      }
+
+      .nav {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>📚 Tutorial CargoBot Kids</h1>
+    <p>Aprenda a programar a garra do robô!</p>
+  </header>
+
+  <div class="container">
+    <div class="nav">
+      <a href="index.html">← Voltar ao Playground</a>
+      <button onclick="document.getElementById('toc').scrollIntoView({behavior: 'smooth'})">📋 Sumário</button>
+    </div>
+
+    <!-- Introdução -->
+    <section>
+      <h2>🎯 O que é CargoBot Kids?</h2>
+      <p>CargoBot Kids é um playground de programação onde <strong>você controla uma garra robótica</strong> usando comandos em português.</p>
+      
+      <p style="margin-top: 1rem;">A garra pode:</p>
+      <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+        <li>🔴 Mover para a <strong>direita</strong></li>
+        <li>🔵 Mover para a <strong>esquerda</strong></li>
+        <li>🟢 <strong>Descer</strong> para pegar ou soltar caixas</li>
+        <li>🟡 <strong>Esperar</strong> um tempo antes do próximo comando</li>
+        <li>⭐ <strong>Repetir</strong> um grupo de comandos várias vezes</li>
+      </ul>
+
+      <div class="tip">
+        <div class="tip-title">💡 Dica:</div>
+        <p>Pense nos comandos como instruções que você dá ao robô. Ele vai executar exatamente o que você escrever!</p>
+      </div>
+    </section>
+
+    <!-- Sumário -->
+    <section id="toc">
+      <h2>📋 Sumário do Tutorial</h2>
+      <ol style="margin-left: 2rem; line-height: 2;">
+        <li><a href="#comandos" style="color: var(--accent); text-decoration: none;">Comandos Básicos</a></li>
+        <li><a href="#exemplos" style="color: var(--accent); text-decoration: none;">Exemplos Práticos</a></li>
+        <li><a href="#repeticao" style="color: var(--accent); text-decoration: none;">Usando Repetição</a></li>
+        <li><a href="#problemas" style="color: var(--accent); text-decoration: none;">Resolvendo Problemas</a></li>
+        <li><a href="#desafios" style="color: var(--accent); text-decoration: none;">Desafios para Praticar</a></li>
+      </ol>
+    </section>
+
+    <!-- Comandos -->
+    <section id="comandos">
+      <h2>🎮 Comandos Disponíveis</h2>
+      
+      <p>Existem <strong>5 comandos principais</strong> que você pode usar:</p>
+
+      <div class="command-list">
+        <div class="command-card">
+          <h4>direita</h4>
+          <p>Move a garra um espaço para a <strong>direita</strong></p>
+          <div class="syntax">direita</div>
+        </div>
+
+        <div class="command-card">
+          <h4>esquerda</h4>
+          <p>Move a garra um espaço para a <strong>esquerda</strong></p>
+          <div class="syntax">esquerda</div>
+        </div>
+
+        <div class="command-card">
+          <h4>descer</h4>
+          <p>Desce a garra para <strong>pegar ou soltar</strong> uma caixa</p>
+          <div class="syntax">descer</div>
+        </div>
+
+        <div class="command-card">
+          <h4>esperar N</h4>
+          <p>Aguarda <strong>N milissegundos</strong> (1000 = 1 segundo)</p>
+          <div class="syntax">esperar 500</div>
+        </div>
+
+        <div class="command-card">
+          <h4>repita N { ... }</h4>
+          <p>Repete os comandos dentro das chaves <strong>N vezes</strong></p>
+          <div class="syntax">repita 3 { direita }</div>
+        </div>
+      </div>
+
+      <h3>📝 Regras Importantes</h3>
+      <ul style="margin-left: 2rem;">
+        <li>Os comandos devem estar em <strong>português</strong></li>
+        <li>Um comando por linha é mais fácil de ler</li>
+        <li>Você pode usar <strong>#</strong> para adicionar comentários (notas para você)</li>
+        <li>A garra tem <strong>7 pilhas</strong> (P1 a P7) onde as caixas são armazenadas</li>
+      </ul>
+
+      <div class="example">
+        <div class="example-title">✅ Exemplo correto:</div>
+        <div class="code-block"><code># Mover para direita
+direita
+direita
+descer</code></div>
+      </div>
+    </section>
+
+    <!-- Exemplos Práticos -->
+    <section id="exemplos">
+      <h2>📖 Exemplos Práticos</h2>
+
+      <h3>Exemplo 1: Mover a Garra</h3>
+      <p>Vamos começar simples - apenas mover a garra para a direita:</p>
+      <div class="code-block"><code>direita
+direita
+direita</code></div>
+      <p><strong>O que acontece:</strong> A garra se move 3 vezes para a direita. ↪️➡️➡️</p>
+
+      <h3>Exemplo 2: Pegar uma Caixa</h3>
+      <p>Agora vamos pegar uma caixa da pilha inicial:</p>
+      <div class="code-block"><code">direita
+descer</code></div>
+      <p><strong>O que acontece:</strong> A garra se move 1 vez para a direita, depois desce e pega a caixa do topo da pilha P2.</p>
+
+      <div class="tip">
+        <div class="tip-title">💡 Dica:</div>
+        <p>Quando a garra desce em uma pilha com caixas, ela <strong>pega a caixa do topo</strong>. Quando desce já segurando uma caixa, ela <strong>solta a caixa</strong>.</p>
+      </div>
+
+      <h3>Exemplo 3: Mover Caixa para Outra Pilha</h3>
+      <p>Vamos pegar uma caixa e levar para outra pilha:</p>
+      <div class="code-block"><code"># Pegar a caixa de P1
+descer
+
+# Mover para a pilha P2
+direita
+
+# Soltar a caixa
+descer</code></div>
+      <p><strong>O que acontece:</strong> A garra pega a caixa de P1, se move 1 espaço para a direita (P2) e solta a caixa lá.</p>
+
+      <div class="exercise">
+        <div class="exercise-title">🎯 Exercício 1:</div>
+        <p>Tente pegar a primeira caixa (amarela) e mover para a pilha P3. Escreva os comandos no playground!</p>
+      </div>
+    </section>
+
+    <!-- Repetição -->
+    <section id="repeticao">
+      <h2>🔄 Usando Repetição</h2>
+
+      <p>Às vezes você precisa fazer o mesmo comando várias vezes. Em vez de escrever <span class="command">direita</span> 5 vezes, use <span class="command">repita</span>!</p>
+
+      <h3>Sintaxe da Repetição</h3>
+      <div class="code-block"><code>repita N {
+  comando1
+  comando2
+  ...
+}</code></div>
+
+      <p><strong>N</strong> é o número de vezes que você quer repetir. Os comandos dentro das <strong>{chaves}</strong> serão repetidos N vezes.</p>
+
+      <h3>Exemplo: Ir Muito Longe</h3>
+      <p>Sem repetição (trabalhoso):</p>
+      <div class="code-block"><code">direita
+direita
+direita
+direita
+direita
+direita
+direita</code></div>
+
+      <p>Com repetição (muito melhor!):</p>
+      <div class="code-block"><code">repita 7 {
+  direita
+}</code></div>
+
+      <p><strong>Resultado é o mesmo, mas o código é muito mais limpo! 🎉</strong></p>
+
+      <h3>Repetição Aninhada (Avançado)</h3>
+      <p>Você pode colocar uma repetição dentro de outra:</p>
+      <div class="code-block"><code">repita 3 {
+  descer
+  repita 2 {
+    direita
+  }
+}</code></div>
+
+      <p>Este código:</p>
+      <ol style="margin-left: 2rem;">
+        <li>Desce a garra</li>
+        <li>Move 2 vezes para a direita</li>
+        <li>Repete tudo isso 3 vezes</li>
+      </ol>
+
+      <div class="exercise">
+        <div class="exercise-title">🎯 Exercício 2:</div>
+        <p>Use <span class="command">repita</span> para mover a garra para a direita 5 vezes em uma só linha de código!</p>
+      </div>
+    </section>
+
+    <!-- Resolvendo Problemas -->
+    <section id="problemas">
+      <h2>🐛 Resolvendo Problemas</h2>
+
+      <h3>❌ Erro: "A garra saiu da área"</h3>
+      <p><strong>O que significa:</strong> A garra moveu-se demais para a direita ou esquerda, saindo do campo de jogo.</p>
+      <p><strong>Solução:</strong> Conte as pilhas (P1 a P7) e não mova além da pilha 7 para a direita ou antes da pilha 1 para a esquerda.</p>
+
+      <h3>❌ Erro: "Comando desconhecido"</h3>
+      <p><strong>O que significa:</strong> Você escreveu um comando que o robô não conhece.</p>
+      <p><strong>Comandos válidos são:</strong> <span class="command">direita</span>, <span class="command">esquerda</span>, <span class="command">descer</span>, <span class="command">esperar</span>, <span class="command">repita</span></p>
+      <p><strong>Verificar:</strong> Certifique-se de estar escrevendo em português e sem erros de digitação.</p>
+
+      <h3>❌ Erro: "Sintaxe inválida"</h3>
+      <p><strong>O que significa:</strong> Há algo errado com a estrutura do seu código.</p>
+      <p><strong>Causas comuns:</strong></p>
+      <ul style="margin-left: 2rem;">
+        <li>Esqueceu as <strong>{chaves}</strong> no <span class="command">repita</span></li>
+        <li>Esqueceu o número depois de <span class="command">esperar</span> ou <span class="command">repita</span></li>
+        <li>Chaves <strong>desbalanceadas</strong> (mais de um tipo que do outro)</li>
+      </ul>
+
+      <div class="example">
+        <div class="example-title">❌ Errado:</div>
+        <div class="code-block"><code>repita 5
+  direita</code></div>
+        <p><strong>Problema:</strong> Faltam as chaves {}</p>
+      </div>
+
+      <div class="example">
+        <div class="example-title">✅ Correto:</div>
+        <div class="code-block"><code>repita 5 {
+  direita
+}</code></div>
+      </div>
+
+      <div class="tip">
+        <div class="tip-title">💡 Dica de Debug:</div>
+        <p>Se receber um erro, leia a mensagem com atenção! Ela mostra qual é o problema. Use os botões <strong>Direita, Esquerda, Descer</strong> para testar a garra manualmente.</p>
+      </div>
+    </section>
+
+    <!-- Desafios -->
+    <section id="desafios">
+      <h2>⭐ Desafios para Praticar</h2>
+
+      <h3>Desafio 1: Mover Todas as Caixas</h3>
+      <p>No playground, há 4 caixas na pilha P1 (amarela, azul, verde, vermelho). Seu desafio:</p>
+      <ul style="margin-left: 2rem;">
+        <li>Mover todas as 4 caixas para a pilha P2</li>
+        <li>Depois mover todas as 4 para a pilha P3</li>
+        <li>Depois mover todas as 4 para a pilha P4</li>
+      </ul>
+      <p><strong>Dica:</strong> Use repetição! 🔄</p>
+
+      <h3>Desafio 2: Organizar as Caixas</h3>
+      <p>Coloque as caixas em uma ordem específica:</p>
+      <ul style="margin-left: 2rem;">
+        <li>P1: Amarelo</li>
+        <li>P2: Azul</li>
+        <li>P3: Verde</li>
+        <li>P4: Vermelho</li>
+      </ul>
+
+      <h3>Desafio 3: Criar um Padrão</h3>
+      <p>Use repetição aninhada para criar um padrão. Por exemplo:</p>
+      <ul style="margin-left: 2rem;">
+        <li>Pegue uma caixa</li>
+        <li>Mova 2 espaços para a direita</li>
+        <li>Solte a caixa</li>
+        <li>Repita 3 vezes</li>
+      </ul>
+
+      <div class="example">
+        <div class="example-title">💡 Solução do Desafio 1:</div>
+        <div class="code-block"><code"># Mover 4 caixas de P1 para P2
+repita 4 {
+  descer
+  direita
+  descer
+  esquerda
+}</code></div>
+      </div>
+    </section>
+
+    <!-- Resumo -->
+    <section>
+      <h2>📚 Resumo Final</h2>
+
+      <table>
+        <tr>
+          <th>Comando</th>
+          <th>O que faz</th>
+          <th>Exemplo</th>
+        </tr>
+        <tr>
+          <td><span class="command">direita</span></td>
+          <td>Move a garra 1 espaço para a direita</td>
+          <td><code>direita</code></td>
+        </tr>
+        <tr>
+          <td><span class="command">esquerda</span></td>
+          <td>Move a garra 1 espaço para a esquerda</td>
+          <td><code>esquerda</code></td>
+        </tr>
+        <tr>
+          <td><span class="command">descer</span></td>
+          <td>Desce a garra para pegar/soltar caixa</td>
+          <td><code>descer</code></td>
+        </tr>
+        <tr>
+          <td><span class="command">esperar N</span></td>
+          <td>Espera N milissegundos</td>
+          <td><code>esperar 1000</code></td>
+        </tr>
+        <tr>
+          <td><span class="command">repita N { ... }</span></td>
+          <td>Repete os comandos N vezes</td>
+          <td><code>repita 3 { direita }</code></td>
+        </tr>
+      </table>
+
+      <h3>🎓 Pontos Principais para Lembrar</h3>
+      <ul style="margin-left: 2rem; margin-top: 1rem;">
+        <li>✅ Sempre use português nos comandos</li>
+        <li>✅ Use repetição para evitar código repetitivo</li>
+        <li>✅ Teste seus comandos com os botões manuais antes</li>
+        <li>✅ Leia mensagens de erro - elas ajudam a corrigir</li>
+        <li>✅ Use comentários (#) para deixar notas no seu código</li>
+        <li>✅ Seja criativo e experimente combinações diferentes! 🚀</li>
+      </ul>
+
+      <div class="tip">
+        <div class="tip-title">🎉 Parabéns!</div>
+        <p>Agora você está pronto para controlar a garra robótica! Volte ao <a href="index.html" style="color: var(--accent); text-decoration: underline;">Playground</a> e comece a programar. Divirta-se! 🤖</p>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <p>CargoBot Kids © 2026 | Um playground de programação para crianças 🎮</p>
+    <p><a href="index.html" style="color: var(--accent); text-decoration: none;">← Voltar ao Playground</a></p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CargoBot Kids - Playground</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="bg-shape bg-shape-1" aria-hidden="true"></div>
+  <div class="bg-shape bg-shape-2" aria-hidden="true"></div>
+
+  <header class="header">
+    <h1>CargoBot Kids</h1>
+    <p>Programação divertida: mova a garra com código</p>
+  </header>
+
+  <main class="layout">
+    <section class="panel simulator">
+      <h2>Simulador</h2>
+      <div class="level-info">
+        <div id="level-name"></div>
+        <p id="level-hint"></p>
+      </div>
+      <div id="simulator" class="simulator-area" aria-label="Área de simulação"></div>
+      <div class="status-row">
+        <span id="status">Pronto para começar.</span>
+      </div>
+      <div class="controls">
+        <button id="btn-step-right">Direita</button>
+        <button id="btn-step-left">Esquerda</button>
+        <button id="btn-step-down">Descer</button>
+        <button id="btn-reset" class="secondary">Resetar</button>
+      </div>
+    </section>
+
+    <section class="panel code-panel">
+      <h2>Código</h2>
+      <p class="hint"><strong>Comandos:</strong> <code>direita</code>, <code>esquerda</code>, <code>descer</code>, <code>esperar 400</code>, <code>repita 3 { ... }</code></p>
+      <textarea id="code" spellcheck="false"># Exemplo
+repita 2 {
+  direita
+  descer
+  esquerda
+  descer
+}
+
+repita 3 {
+  direita
+}
+
+descer
+</textarea>
+      <div class="controls">
+        <button id="btn-run">Executar Código</button>
+        <button id="btn-stop" class="secondary">Parar</button>
+        <button id="btn-load" class="secondary">Carregar Exemplo</button>
+        <a href="tutorial.html" style="display: inline-block; padding: 0.7rem 1.2rem; background: #a855f7; color: white; border: none; border-radius: 6px; text-decoration: none; font-size: 1rem; cursor: pointer; transition: all 0.3s;">📚 Tutorial</a>
+      </div>
+      <div class="legend">
+        <span><span class="crate" style="background: linear-gradient(135deg, #fbbf24 0%, #f2a541 100%);"></span> Amarelo</span>
+        <span><span class="crate" style="background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);"></span> Azul</span>
+        <span><span class="crate" style="background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);"></span> Verde</span>
+        <span><span class="crate" style="background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);"></span> Vermelho</span>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

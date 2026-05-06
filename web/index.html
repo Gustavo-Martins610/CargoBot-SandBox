@@ -27,29 +27,54 @@
         <span id="status">Pronto para começar.</span>
       </div>
       <div class="controls">
-        <button id="btn-step-right">Direita</button>
-        <button id="btn-step-left">Esquerda</button>
-        <button id="btn-step-down">Descer</button>
         <button id="btn-reset" class="secondary">Resetar</button>
       </div>
     </section>
 
     <section class="panel code-panel">
       <h2>Código</h2>
-      <p class="hint"><strong>Comandos:</strong> <code>direita</code>, <code>esquerda</code>, <code>descer</code>, <code>esperar 400</code>, <code>repita 3 { ... }</code></p>
-      <textarea id="code" spellcheck="false"># Exemplo
-repita 2 {
-  direita
+      <p class="hint"><strong>Comandos:</strong> <code>direita</code>, <code>esquerda</code>, <code>descer</code>, <code>esperar 400</code>, <code>repita 3 { ... }</code>, <code>func nome { ... }</code>, <code>chamar nome</code>, <code>nome()</code></p>
+      <textarea id="code" spellcheck="false"># Solucao 3 estrelas - Go Left 2 (nivel facil)
+func pegar {
   descer
+}
+
+func soltar {
+  descer
+}
+
+func passoDireita {
+  direita
+}
+
+func passoEsquerda {
   esquerda
-  descer
 }
 
+func moverDireitaParaEsquerda {
+  chamar pegar
+  chamar passoEsquerda
+  chamar soltar
+  chamar passoDireita
+}
+
+# P2 -> P1
+direita
 repita 3 {
-  direita
+  chamar moverDireitaParaEsquerda
 }
 
-descer
+# P3 -> P2
+direita
+repita 3 {
+  chamar moverDireitaParaEsquerda
+}
+
+# P4 -> P3
+direita
+repita 3 {
+  chamar moverDireitaParaEsquerda
+}
 </textarea>
       <div class="controls">
         <button id="btn-run">Executar Código</button>

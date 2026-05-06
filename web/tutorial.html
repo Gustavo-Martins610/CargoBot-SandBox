@@ -330,7 +330,7 @@
     <section id="comandos">
       <h2>🎮 Comandos Disponíveis</h2>
       
-      <p>Existem <strong>5 comandos principais</strong> que você pode usar:</p>
+      <p>Existem <strong>7 comandos principais</strong> que você pode usar:</p>
 
       <div class="command-list">
         <div class="command-card">
@@ -362,6 +362,18 @@
           <p>Repete os comandos dentro das chaves <strong>N vezes</strong></p>
           <div class="syntax">repita 3 { direita }</div>
         </div>
+
+        <div class="command-card">
+          <h4>func nome { ... }</h4>
+          <p>Declara uma <strong>funcao</strong> com um nome para reutilizar comandos</p>
+          <div class="syntax">func moverDireita { direita }</div>
+        </div>
+
+        <div class="command-card">
+          <h4>chamar nome / nome()</h4>
+          <p>Executa uma <strong>funcao</strong> que você declarou</p>
+          <div class="syntax">chamar moverDireita</div>
+        </div>
       </div>
 
       <h3>📝 Regras Importantes</h3>
@@ -375,8 +387,12 @@
       <div class="example">
         <div class="example-title">✅ Exemplo correto:</div>
         <div class="code-block"><code># Mover para direita
-direita
-direita
+func passoDireita {
+  direita
+}
+
+chamar passoDireita
+passoDireita()
 descer</code></div>
       </div>
     </section>
@@ -419,6 +435,20 @@ descer</code></div>
         <div class="exercise-title">🎯 Exercício 1:</div>
         <p>Tente pegar a primeira caixa (amarela) e mover para a pilha P3. Escreva os comandos no playground!</p>
       </div>
+
+      <h3>Exemplo 4: Funcoes</h3>
+      <p>Funcoes ajudam a reutilizar passos sem repetir tudo:</p>
+      <div class="code-block"><code>func pegar {
+  descer
+}
+
+func soltar {
+  descer
+}
+
+chamar pegar
+direita
+chamar soltar</code></div>
     </section>
 
     <!-- Repetição -->

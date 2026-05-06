@@ -13,6 +13,9 @@ Comandos aceitos no editor:
 - descer
 - esperar 400
 - repita N { ... }
+- func nome { ... }
+- chamar nome
+- nome()
 
 Observações:
 - Descer funciona como pegar/soltar caixa (toggle).

@@ -1,10 +1,18 @@
 const initialState = {
   clawPos: 0,
   holding: null,
-  piles: [["blue", "red", "green", "yellow"], [], [], [], [], [], []],
-  levelName: "Playground",
+  piles: [
+    [],
+    ["red", "red", "red"],
+    ["blue", "blue", "blue"],
+    ["green", "green", "green"],
+    [],
+    [],
+    [],
+  ],
+  levelName: "Go Left 2",
   levelHint:
-    "Bem-vindo! Mova a garra com código e organize as caixas como desejar.",
+    "Go right if holding none, and left if holding any. Repeat.\n\nThe shortest solution uses 4 registers.",
 };
 
 let state = cloneState(initialState);
@@ -21,9 +29,6 @@ const btnRun = document.getElementById("btn-run");
 const btnStop = document.getElementById("btn-stop");
 const btnLoad = document.getElementById("btn-load");
 const btnReset = document.getElementById("btn-reset");
-const btnStepRight = document.getElementById("btn-step-right");
-const btnStepLeft = document.getElementById("btn-step-left");
-const btnStepDown = document.getElementById("btn-step-down");
 
 function cloneState(src) {
   return {
@@ -147,14 +152,15 @@ function parseProgram(source) {
     .map((line) => line.replace(/#.*$/, "").trim())
     .filter((line) => line.length > 0);
 
-  const [commands, nextIndex] = parseBlock(lines, 0, false);
+  const context = { functions: {} };
+  const [commands, nextIndex] = parseBlock(lines, 0, false, context, true);
   if (nextIndex !== lines.length) {
     throw new Error("Existe um bloco fechado fora de lugar.");
   }
-  return commands;
+  return expandCommands(commands, context.functions, []);
 }
 
-function parseBlock(lines, startIndex, mustClose) {
+function parseBlock(lines, startIndex, mustClose, context, allowFunctionDefs) {
   const commands = [];
   let i = startIndex;
 
@@ -168,10 +174,39 @@ function parseBlock(lines, startIndex, mustClose) {
       return [commands, i + 1];
     }
 
+    const funcMatch = line.match(/^func\s+([a-zA-Z_][\w]*)\s*\{$/i);
+    if (funcMatch) {
+      if (!allowFunctionDefs) {
+        throw new Error(
+          `Linha ${i + 1}: declaracao de funcao nao permitida aqui.`,
+        );
+      }
+      const name = funcMatch[1].toLowerCase();
+      if (context.functions[name]) {
+        throw new Error(`Linha ${i + 1}: funcao ${name} ja foi declarada.`);
+      }
+      const [bodyCommands, newIndex] = parseBlock(
+        lines,
+        i + 1,
+        true,
+        context,
+        false,
+      );
+      context.functions[name] = bodyCommands;
+      i = newIndex;
+      continue;
+    }
+
     const repitaMatch = line.match(/^repita\s+(\d+)\s*\{$/i);
     if (repitaMatch) {
       const times = Number(repitaMatch[1]);
-      const [innerCommands, newIndex] = parseBlock(lines, i + 1, true);
+      const [innerCommands, newIndex] = parseBlock(
+        lines,
+        i + 1,
+        true,
+        context,
+        false,
+      );
       for (let n = 0; n < times; n += 1) {
         commands.push(...innerCommands);
       }
@@ -204,6 +239,20 @@ function parseBlock(lines, startIndex, mustClose) {
       continue;
     }
 
+    const callMatch = line.match(/^chamar\s+([a-zA-Z_][\w]*)$/i);
+    if (callMatch) {
+      commands.push({ op: "call", name: callMatch[1].toLowerCase() });
+      i += 1;
+      continue;
+    }
+
+    const callParenMatch = line.match(/^([a-zA-Z_][\w]*)\s*\(\s*\)$/);
+    if (callParenMatch) {
+      commands.push({ op: "call", name: callParenMatch[1].toLowerCase() });
+      i += 1;
+      continue;
+    }
+
     throw new Error(`Linha ${i + 1}: comando invalido -> ${line}`);
   }
 
@@ -212,6 +261,29 @@ function parseBlock(lines, startIndex, mustClose) {
   }
 
   return [commands, i];
+}
+
+function expandCommands(commands, functions, callStack) {
+  const output = [];
+  for (const cmd of commands) {
+    if (cmd.op === "call") {
+      const name = cmd.name;
+      const body = functions[name];
+      if (!body) {
+        throw new Error(`Funcao nao definida: ${name}`);
+      }
+      if (callStack.includes(name)) {
+        throw new Error(
+          `Recursao nao permitida: ${[...callStack, name].join(" -> ")}`,
+        );
+      }
+      const expanded = expandCommands(body, functions, [...callStack, name]);
+      output.push(...expanded);
+    } else {
+      output.push(cmd);
+    }
+  }
+  return output;
 }
 
 async function execute(commands) {
@@ -266,6 +338,51 @@ function reset() {
   setStatus("Estado resetado.");
 }
 
+function generateSampleProgram() {
+  return `# Solucao 3 estrelas - Go Left 2 (nivel facil)
+func pegar {
+  descer
+}
+
+func soltar {
+  descer
+}
+
+func passoDireita {
+  direita
+}
+
+func passoEsquerda {
+  esquerda
+}
+
+func moverDireitaParaEsquerda {
+  chamar pegar
+  chamar passoEsquerda
+  chamar soltar
+  chamar passoDireita
+}
+
+# P2 -> P1
+direita
+repita 3 {
+  chamar moverDireitaParaEsquerda
+}
+
+# P3 -> P2
+direita
+repita 3 {
+  chamar moverDireitaParaEsquerda
+}
+
+# P4 -> P3
+direita
+repita 3 {
+  chamar moverDireitaParaEsquerda
+}
+`;
+}
+
 btnRun.addEventListener("click", () => {
   try {
     const commands = parseProgram(codeEl.value);
@@ -280,75 +397,56 @@ btnStop.addEventListener("click", () => {
 });
 
 btnLoad.addEventListener("click", () => {
-  codeEl.value = `# Distribuir os 4 blocos em pilhas diferentes!
-# Bloco 1 para P2
-descer
-direita
-descer
-esquerda
+  codeEl.value = `# Solucao 3 estrelas - Go Left 2 (nivel facil)
+func pegar {
+  descer
+}
 
-# Bloco 2 para P3
-descer
-direita
-direita
-descer
-esquerda
-esquerda
+func soltar {
+  descer
+}
 
-# Bloco 3 para P4
-descer
-direita
-direita
-direita
-descer
-esquerda
-esquerda
-esquerda
+func passoDireita {
+  direita
+}
 
-# Bloco 4 para P5
-descer
+func passoEsquerda {
+  esquerda
+}
+
+func moverDireitaParaEsquerda {
+  chamar pegar
+  chamar passoEsquerda
+  chamar soltar
+  chamar passoDireita
+}
+
+# P2 -> P1
 direita
+repita 3 {
+  chamar moverDireitaParaEsquerda
+}
+
+# P3 -> P2
 direita
+repita 3 {
+  chamar moverDireitaParaEsquerda
+}
+
+# P4 -> P3
 direita
-direita
-descer`;
+repita 3 {
+  chamar moverDireitaParaEsquerda
+}
+`;
   setStatus("Exemplo carregado.");
 });
 
 btnReset.addEventListener("click", reset);
 
-btnStepRight.addEventListener("click", () => {
-  try {
-    moveRight();
-    render();
-    setStatus("Movimento manual: direita");
-  } catch (err) {
-    setStatus(`Erro: ${err.message}`);
-  }
-});
-
-btnStepLeft.addEventListener("click", () => {
-  try {
-    moveLeft();
-    render();
-    setStatus("Movimento manual: esquerda");
-  } catch (err) {
-    setStatus(`Erro: ${err.message}`);
-  }
-});
-
-btnStepDown.addEventListener("click", () => {
-  try {
-    toggleDown();
-    render();
-    setStatus("Movimento manual: descer (pegar/soltar)");
-  } catch (err) {
-    setStatus(`Erro: ${err.message}`);
-  }
-});
-
 window.addEventListener("resize", render);
 
+codeEl.value = generateSampleProgram();
 render();
 levelNameEl.textContent = state.levelName;
 levelHintEl.textContent = state.levelHint;
